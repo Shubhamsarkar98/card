@@ -2,6 +2,7 @@ import "./App.css";
 import image from "./images/bg-main-desktop.png";
 import card from "./images/bg-card-front.png";
 import card2 from "./images/bg-card-back.png";
+import trick from "./images/icon-complete.svg"
 import { useState } from "react";
 function App() {
   const [error, seterror] = useState(false);
@@ -16,9 +17,10 @@ function App() {
   const [debitblank, setdebitblank] = useState(false);
   const [cvv, setcvv] = useState("");
   const [cvverror, setcvverror] = useState(false);
+  const [comp, setcomp] = useState(false)
   const handle = (e) => {
     e.preventDefault();
-
+    setcomp(true)
     if (name.length == 0) {
       setnameerr(true);
     } else {
@@ -38,10 +40,14 @@ function App() {
     } else if (cvv === "") {
       setcvverror(true);
     }
+    
+
     if (mm === "") {
       setmmerror(true);
     }
   };
+
+
 
   return (
     <div
@@ -63,7 +69,8 @@ function App() {
           className="col-md-4 rightSide"
           style={{ marginTop: "240px", marginLeft: "430px" }}
         >
-          <form>
+          {
+            !comp && <form className="form">
             <div className="mb-3">
               <label htmlFor="exampleInputEmail1" className="form-label">
                 Card Holder
@@ -163,6 +170,10 @@ function App() {
               </button>
             </div>
           </form>
+          }
+         
+          {comp &&  < Thankyou setcomp={setcomp}/> }
+          
         </div>
       </div>
       <div
@@ -172,9 +183,10 @@ function App() {
           top: "10%",
           backgroundRepeat: "no-repeat",
         }}
+        className="tablename"
       >
-        <img src={card} alt="card" />
-        <table style={{ marginTop: "-105px", marginLeft: "30px" }} width="80%">
+        <img src={card} alt="card"  className="front"/>
+        <table style={{ marginTop: "-105px", marginLeft: "30px" }} width="80%" className="tableview">
           <tr>
             {debit.length > 1 ? (
               <td
@@ -183,6 +195,7 @@ function App() {
                   color: "white",
                   fontSize: "35px",
                 }}
+                className="debit"
               >
                 {debit}
               </td>
@@ -249,7 +262,10 @@ function App() {
           left: "15%",
           top: "50%",
           backgroundRepeat: "no-repeat",
+          
+
         }}
+        className="back"
       >
         <img src={card2} alt="card" />
         <table
@@ -285,6 +301,19 @@ function App() {
       </div>
     </div>
   );
+}
+
+
+
+function Thankyou({setcomp}){
+ return(
+  <>
+  <img src={trick} alt="" className="mx-auto" style={{display:'block'}}/>
+  <h1 style={{textAlign:'center'}}>Thank You</h1>
+  <p style={{textAlign:'center'}}>We've add You Card details </p>
+  <button class="btn btn-primary"  style={{ width: "100%", backgroundColor: "#00008B" }} onClick={()=>setcomp(false)}>Continue</button>
+  </>
+ )
 }
 
 export default App;
