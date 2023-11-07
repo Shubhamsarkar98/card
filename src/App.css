@@ -1,18 +1,34 @@
-@media  screen and (max-width: 480px) {
+@media  screen and (max-width: 580px) {
     .leftSide {
       width: 100%;
-      height: 40%;
+      height: 400px;
     }
 
+   .rightSide{
+    margin-right: 410px;
+    width: auto;
+   }
+  
+  .back{
+    margin-top: 30px;
+   margin-left: -20px;
+   
+  
+  }
+  .cvv{
+  margin-bottom: -320px;
+  padding-right: 120px;
+  }
   
   
-  .tablename{
-    position: absolute;
-    left: 10%;
-    top: 10%
-  }
-  .form{
-    margin-right: 220px;
-  }
+}
+
+.leftSide {
+  position: relative;
+ 
+}
+
+.rightSide {
+  position: relative;
   
 }

@@ -2,10 +2,10 @@ import "./App.css";
 import image from "./images/bg-main-desktop.png";
 import card from "./images/bg-card-front.png";
 import card2 from "./images/bg-card-back.png";
-import trick from "./images/icon-complete.svg"
+import trick from "./images/icon-complete.svg";
 import { useState } from "react";
 function App() {
-  const [error, seterror] = useState(false);
+  const [error, seterror] = useState({});
   const [nameerr, setnameerr] = useState(false);
   const [name, setname] = useState("");
   const [debit, setdebit] = useState("");
@@ -17,17 +17,20 @@ function App() {
   const [debitblank, setdebitblank] = useState(false);
   const [cvv, setcvv] = useState("");
   const [cvverror, setcvverror] = useState(false);
-  const [comp, setcomp] = useState(false)
+  const [comp, setcomp] = useState(false);
+  
+
+  
   const handle = (e) => {
     e.preventDefault();
-    setcomp(true)
+
     if (name.length == 0) {
       setnameerr(true);
     } else {
       setnameerr(false);
     }
     const pattern = /^[0-9]{2,16}( [0-9]{2,16})+$/;
-    if (debit.length >= 16 || pattern.test(debit)) {
+    if (pattern.test(debit)) {
       setdebiterror(false);
     } else if (debit === "") {
       setdebitblank(true);
@@ -40,14 +43,11 @@ function App() {
     } else if (cvv === "") {
       setcvverror(true);
     }
-    
 
     if (mm === "") {
       setmmerror(true);
     }
   };
-
-
 
   return (
     <div
@@ -60,7 +60,15 @@ function App() {
         margin: "0 auto",
       }}
     >
-      <div className="row" style={{ height: "890px" }}>
+      <div
+        className="row main"
+        style={{
+          height: "890px",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
         <div
           className="col-md-3 leftSide"
           style={{ backgroundImage: `url(${image})`, float: "left" }}
@@ -69,111 +77,113 @@ function App() {
           className="col-md-4 rightSide"
           style={{ marginTop: "240px", marginLeft: "430px" }}
         >
-          {
-            !comp && <form className="form">
-            <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Card Holder
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="e.g. shubham sarkar"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                value={name}
-                onChange={(e) => setname(e.target.value)}
-              />
-              {nameerr ? (
-                <p style={{ color: "red" }}>Please given value </p>
-              ) : null}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                Card Number
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputPassword1"
-                placeholder="e.g. 12345668798016632"
-                maxLength={16}
-                value={debit}
-                onChange={(e) => setdebit(e.target.value)}
-              />
-              {debiterror ? (
-                <p style={{ color: "red" }}>Only Given Number </p>
-              ) : null}
-              {debitblank ? (
-                <p style={{ color: "red" }}>Only Given value </p>
-              ) : null}
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <label htmlFor="exampleInputPassword1" className="form-label">
-                  Exp.Date(MM/YY)
+          {!comp && (
+            <form className="form">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Card Holder
                 </label>
-                <div className="row">
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleInputPassword1"
-                      placeholder="MM"
-                      value={mm}
-                      onChange={(e) => setmm(e.target.value)}
-                      style={{ padding: "6px" }}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleInputPassword1"
-                      placeholder="YY"
-                      value={yy}
-                      onChange={(e) => setyy(e.target.value)}
-                      style={{ padding: "6px" }}
-                    />
-                  </div>
-                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. shubham sarkar"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  value={name}
+                  onChange={(e) => setname(e.target.value)}
+                />
+                {nameerr ? (
+                  <p style={{ color: "red" }}>Please given value </p>
+                ) : null}
               </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    CVV
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Card Number
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputPassword1"
+                  placeholder="e.g. 12345668798016632"
+                  maxLength={16}
+                  value={debit
+                    .replace(/\s/g, "")
+                    .replace(/(\d{4})/g, "$1 ")
+                    .trim()}
+                  onChange={(e) => setdebit(e.target.value)}
+                />
+                {debiterror ? (
+                  <p style={{ color: "red" }}>Only Given Number </p>
+                ) : null}
+                {debitblank ? (
+                  <p style={{ color: "red" }}>Only Given value </p>
+                ) : null}
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <label htmlFor="exampleInputPassword1" className="form-label">
+                    Exp.Date(MM/YY)
                   </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="e.g. 123"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    value={cvv}
-                    maxLength={3}
-                    onChange={(e) => setcvv(e.target.value)}
-                  />
-                  {
-                    cvverror?<p style={{ color: "red" }}>Only value Number </p>:null
-                  }
+                  <div className="row">
+                    <div className="col-md-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="exampleInputPassword1"
+                        placeholder="MM"
+                        value={mm}
+                        onChange={(e) => setmm(e.target.value)}
+                        style={{ padding: "6px" }}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="exampleInputPassword1"
+                        placeholder="YY"
+                        value={yy}
+                        onChange={(e) => setyy(e.target.value)}
+                        style={{ padding: "6px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      CVV
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="e.g. 123"
+                      id="exampleInputEmail1"
+                      aria-describedby="emailHelp"
+                      value={cvv}
+                      maxLength={3}
+                      onChange={(e) => setcvv(e.target.value)}
+                    />
+                    {cvverror ? (
+                      <p style={{ color: "red" }}>Only value Number </p>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="text-center">
-              <button
-                type="submit"
-                className="btn btn-primary "
-                style={{ width: "100%", backgroundColor: "#00008B" }}
-                onClick={handle}
-              >
-                Confirm
-              </button>
-            </div>
-          </form>
-          }
-         
-          {comp &&  < Thankyou setcomp={setcomp}/> }
-          
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary "
+                  style={{ width: "100%", backgroundColor: "#00008B" }}
+                  onClick={handle}
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
+          )}
+
+          {comp && <Thankyou setcomp={setcomp} />}
         </div>
       </div>
       <div
@@ -185,27 +195,32 @@ function App() {
         }}
         className="tablename"
       >
-        <img src={card} alt="card"  className="front"/>
-        <table style={{ marginTop: "-105px", marginLeft: "30px" }} width="80%" className="tableview">
+        <img src={card} alt="card" className="front" />
+        <table
+          style={{ marginTop: "-105px", marginLeft: "30px" }}
+          width="80%"
+          className="tableview"
+        >
           <tr>
             {debit.length > 1 ? (
               <td
                 style={{
                   marginLeft: "-400px",
                   color: "white",
-                  fontSize: "35px",
+                  fontSize: "25px",
                 }}
-                className="debit"
+                className="deb"
               >
                 {debit}
               </td>
             ) : (
               <td
                 style={{
-                  marginLeft: "-400px",
+                  marginLeft: "-200px",
                   color: "white",
-                  fontSize: "35px",
+                  fontSize: "25px",
                 }}
+                className="deb"
               >
                 0000 0000 0000 0000
               </td>
@@ -236,6 +251,7 @@ function App() {
                       color: "white",
                       fontSize: "15px",
                     }}
+                    className="cvv"
                   >
                     {mm}/{yy}
                   </span>
@@ -262,8 +278,6 @@ function App() {
           left: "15%",
           top: "50%",
           backgroundRepeat: "no-repeat",
-          
-
         }}
         className="back"
       >
@@ -278,9 +292,10 @@ function App() {
                 style={{
                   marginLeft: "350px",
                   marginTop: "-30px",
-                  color: "white",
+                  color: "red",
                   fontSize: "18px",
                 }}
+                className="cvv"
               >
                 {cvv}
               </span>
@@ -289,9 +304,10 @@ function App() {
                 style={{
                   marginLeft: "350px",
                   marginTop: "-30px",
-                  color: "white",
+                  color: "red",
                   fontSize: "18px",
                 }}
+                className="cvv"
               >
                 123
               </span>
@@ -303,17 +319,26 @@ function App() {
   );
 }
 
-
-
-function Thankyou({setcomp}){
- return(
-  <>
-  <img src={trick} alt="" className="mx-auto" style={{display:'block'}}/>
-  <h1 style={{textAlign:'center'}}>Thank You</h1>
-  <p style={{textAlign:'center'}}>We've add You Card details </p>
-  <button class="btn btn-primary"  style={{ width: "100%", backgroundColor: "#00008B" }} onClick={()=>setcomp(false)}>Continue</button>
-  </>
- )
+function Thankyou({ setcomp }) {
+  return (
+    <>
+      <img
+        src={trick}
+        alt=""
+        className="mx-auto"
+        style={{ display: "block" }}
+      />
+      <h1 style={{ textAlign: "center" }}>Thank You</h1>
+      <p style={{ textAlign: "center" }}>We've add You Card details </p>
+      <button
+        class="btn btn-primary"
+        style={{ width: "100%", backgroundColor: "#00008B" }}
+        onClick={() => setcomp(false)}
+      >
+        Continue
+      </button>
+    </>
+  );
 }
 
 export default App;
